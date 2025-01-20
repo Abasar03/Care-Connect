@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="dashboard">
+        <h1>Welcome, Admin!</h1>
+        <p>This is your admin dashboard. Here you can manage hospital staff, oversee operations, and review reports.</p>
+        <ul>
+            <li><a href="{% url 'manage_users' %}">Manage Users</a></li>
+            <li><a href="{% url 'generate_reports' %}">Generate Reports</a></li>
+            <li><a href="{% url 'system_settings' %}">System Settings</a></li>
+        </ul>
+    </div>
+{% endblock %}

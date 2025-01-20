@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="dashboard">
+        <h1>Welcome, {{ user.first_name }}!</h1>
+        <p>This is your patient dashboard. Here you can view your appointments, medical records, and more.</p>
+        <ul>
+            <li><a href="{% url 'view_appointments' %}">View Appointments</a></li>
+            <li><a href="{% url 'medical_records' %}">Medical Records</a></li>
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+        </ul>
+    </div>
+{% endblock %}

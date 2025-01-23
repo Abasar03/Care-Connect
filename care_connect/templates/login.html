@@ -9,30 +9,28 @@
     <title>Login</title>
 </head>
 <body>
-    <h2>Login</h2>
-    <form method="POST">
+    <h2>Patient Login</h2>
+    <form method="POST" action="{% url 'login' %}">
         {% csrf_token %}
         
-        <!-- Username -->
-        <input type="text" name="username" placeholder="Username" required><br>
+        <!-- Email -->
+        <input type="email" name="email" placeholder="Email" required><br>
         
         <!-- Password -->
         <input type="password" name="password" placeholder="Password" required><br>
-
-        <!-- Patient-specific Fields (hidden initially) -->
-        <div id="patient-fields" style="display:none;">
-            <input type="number" name="age" placeholder="Age" required><br>
-            <input type="text" name="gender" placeholder="Gender" required><br>
-            <textarea name="address" placeholder="Address" required></textarea><br>
-        </div>
 
         <button type="submit">Login</button>
     </form>
 
     <!-- Link to doctor login -->
     <p>Are you a doctor? <a href="{% url 'doctor_login' %}">Login as a Doctor</a></p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert">{{ message }}<a href="{% url 'login' %}">Login Again</a></div>
+            
+        {% endfor %}
+    {% endif %}
 </body>
 </html>
-
-
 {% endblock %}

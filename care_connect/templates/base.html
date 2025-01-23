@@ -1,36 +1,37 @@
-{% load static %}
+<!-- {% load static %} -->
+{% load static tailwind_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Care Connect</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">  <!-- Link to custom CSS -->
+    {% tailwind_css %}
+    <!-- <link rel="stylesheet" href="{% static 'css/style.css' %}">  Link to custom CSS -->
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800">
     <!-- Header Section -->
-    <header>
-
+    <header class="bg-blue-600 text-white py-4">
         <nav>
-            <ul>
-                <a href="{% url 'home' %}">Home</a></li>
-                <a href="{% url 'departments' %}" class="btn">Departments</a>
-                <a href="{% url 'doctors' %}" class="btn">Doctors</a>
-                <a href="{% url 'contact_us' %}" class="btn">Contact Us</a>
-                <a href="{% url 'register' %}" class="btn">Register</a>
+            <ul class="flex justify-center space-x-6">
+                <li><a href="{% url 'home' %}" class="hover:underline">Home</a></li>
+                <li><a href="{% url 'departments' %}" class="text-white hover:underline">Departments</a></li>
+                <li><a href="{% url 'doctors' %}" class="text-white hover:underline">Doctors</a></li>
+                <li><a href="{% url 'contact_us' %}" class="text-white hover:underline">Contact Us</a></li>
+                <li><a href="{% url 'register' %}" class="text-white hover:underline">Register</a></li>
             </ul>
         </nav>
     </header>
 
     <!-- Main Content Section -->
-    <main>
+    <main class="p-4">
         {% block content %}
         <!-- Dynamic content will be inserted here -->
         {% endblock %}
     </main>
 
     <!-- Footer Section -->
-    <footer>
+    <footer class="bg-gray-800 flex flex-col items-center justify-center text-white text-center py-4">
         <p>&copy; 2025 Care Connect. All rights reserved.</p>
     </footer>
 </body>

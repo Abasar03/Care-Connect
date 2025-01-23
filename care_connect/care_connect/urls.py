@@ -29,5 +29,6 @@ urlpatterns = [
     path('doctor-login/', views.doctor_login, name='doctor_login'),
     path('register/', views.register, name='register'),
     path('dashboard/', include('dashboard.urls')),
+    path('__reload__/', include('django_browser_reload.urls')),
 ]
 

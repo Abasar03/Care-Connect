@@ -1,16 +1,38 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
-        <h2>Our Departments</h2>
-        <p>Explore the various departments that offer specialized healthcare services:</p>
-        <ul>
-            <li>Cardiology</li>
-            <li>Neurology</li>
-            <li>Orthopedics</li>
-            <li>Pediatrics</li>
-            <li>Medicine</li>
-            <li>Dermatology</li>
-        </ul>
-    </div>
+<div class="container mx-auto px-4 py-8">
+    <section id="departments" class="mt-10 px-4">
+    <h2 class="text-3xl font-bold mb-4 text-center">Our Departments</h2>
+    <p class="text-lg mb-6 text-center">Explore the various departments that offer specialized healthcare services:</p>
+    
+    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <li class="bg-white shadow-md rounded-lg p-6 transition-transform transform hover:scale-105">
+            <h3 class="text-xl font-semibold mb-2">Cardiology</h3>
+            <p>Specialized care for heart-related conditions.</p>
+        </li>
+        <li class="bg-white shadow-md rounded-lg p-6 transition-transform transform hover:scale-105">
+            <h3 class="text-xl font-semibold mb-2">Neurology</h3>
+            <p>Expertise in brain and nervous system disorders.</p>
+        </li>
+        <li class="bg-white shadow-md rounded-lg p-6 transition-transform transform hover:scale-105">
+            <h3 class="text-xl font-semibold mb-2">Orthopedics</h3>
+            <p>Care for bones, joints, and musculoskeletal system.</p>
+        </li>
+        <li class="bg-white shadow-md rounded-lg p-6 transition-transform transform hover:scale-105">
+            <h3 class="text-xl font-semibold mb-2">Pediatrics</h3>
+            <p>Comprehensive healthcare for children and adolescents.</p>
+        </li>
+        <li class="bg-white shadow-md rounded-lg p-6 transition-transform transform hover:scale-105">
+            <h3 class="text-xl font-semibold mb-2">Medicine</h3>
+            <p>General medical care for various health issues.</p>
+        </li>
+        <li class="bg-white shadow-md rounded-lg p-6 transition-transform transform hover:scale-105">
+            <h3 class="text-xl font-semibold mb-2">Dermatology</h3>
+            <p>Specialized care for skin, hair, and nails.</p>
+        </li>
+    </ul>
+    </section>
+
+</div>
 {% endblock %}

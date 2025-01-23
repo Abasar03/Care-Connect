@@ -39,7 +39,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tailwind',
+    'theme',
+    'django_browser_reload',
+    
 ]
+
+TAILWIND_APP_NAME = 'theme'
+INTERNAL_IPS=[
+    "127.0.0.1",
+]
+
+# path of nodejs file in your laptop
+NPM_BIN_PATH=r"G:\nodejs\npm.cmd"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -49,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_browser_reload.middleware.BrowserReloadMiddleware',
 ]
 
 ROOT_URLCONF = 'care_connect.urls'
@@ -82,9 +95,9 @@ WSGI_APPLICATION = 'care_connect.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'care connect',
+        'NAME': 'careconnect',
         'USER': 'postgres',
-        'PASSWORD': 'LewondoskI@09',
+        'PASSWORD': 'localhost',
         'HOST': 'localhost',
         'PORT': '5432', 
     }

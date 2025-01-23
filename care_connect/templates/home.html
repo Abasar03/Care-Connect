@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="hero">
-        <h1>Welcome to Care Connect</h1>
-        <p>Your trusted hospital management system. Manage your health care needs efficiently.</p>
-        <div class="cta-buttons">
-        </div>
+<!-- Hero Section -->
+<section class="hero flex flex-col items-center bg-blue-600 text-white text-center py-20">
+    <h1 class="text-4xl font-bold mb-4">Welcome to Care Connect</h1>
+    <p class="text-lg mb-8">Your health is our priority. Connect with us today!</p>
+    <div class="cta-buttons space-x-4">
+        <a href="#appointment" class="cta-button bg-sky-500 hover:bg-sky-600 text-white py-3 px-6 rounded-full transition duration-300">Book Appointment</a>
+        <a href="{% url 'login' %}" class="cta-button bg-sky-500 hover:bg-sky-600 text-white py-3 px-6 rounded-full transition duration-300">Login</a>
     </div>
+</section>
 {% endblock %}
-

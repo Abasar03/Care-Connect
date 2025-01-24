@@ -120,11 +120,12 @@ def doctor_login(request):
 
             if doctor:
                 stored_password = doctor[6]  # Adjust this based on the actual table structure
+                username=doctor[0]
                 print(f"Stored password: {stored_password}")
 
                 if check_password(password,stored_password):
                     print(f"Password match for doctor: {email}")
-                    return redirect('doctor_dashboard')
+                    return redirect('doctor_dashboard',username=username)
 
             # If no matching user or invalid password
             messages.error(request, "Invalid email or password.")
@@ -154,11 +155,12 @@ def login(request):
             if patient:
                 # Assuming password is the 6th field in the patient table (adjust index as needed)
                 stored_password = patient[7]  # Adjust this based on the actual table structure
+                username=patient[0]
                 print(f"Stored password: {stored_password}")
 
                 if check_password(password, stored_password):
                     print(f"Password match for patient: {email}")
-                    return redirect('/dashboard/patient_dashboard')
+                    return redirect('patient_dashboard',username=username)
 
             # If no matching user or invalid password
             messages.error(request, "Invalid email or password.")

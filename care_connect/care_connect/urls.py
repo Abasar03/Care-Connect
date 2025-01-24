@@ -18,6 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from . import views
+from dashboard import views as dashboard_views
 
 
 urlpatterns = [
@@ -29,6 +30,7 @@ urlpatterns = [
     path('doctor-login/', views.doctor_login, name='doctor_login'),
     path('register/doctor/', views.doctor_register, name='doctor_register'),
     path('register/patient/', views.patient_register, name='patient_register'),
-    path('', include('dashboard.urls')),
+    path('patient_dashboard/<str:username>/', dashboard_views.patient_dashboard, name='patient_dashboard'),
+    path('doctor_dashboard/<str:username>/', dashboard_views.doctor_dashboard, name='doctor_dashboard'),
 ]
 

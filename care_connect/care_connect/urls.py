@@ -27,7 +27,8 @@ urlpatterns = [
     path('contact-us/', views.contact_us, name='contact_us'),
     path('login/', views.login, name='login'),
     path('doctor-login/', views.doctor_login, name='doctor_login'),
-    path('register/', views.register, name='register'),
-    path('dashboard/', include('dashboard.urls')),
+    path('register/doctor/', views.doctor_register, name='doctor_register'),
+    path('register/patient/', views.patient_register, name='patient_register'),
+    path('', include('dashboard.urls')),
 ]
 

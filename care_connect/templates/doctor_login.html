@@ -24,6 +24,14 @@
     </form>
 
     <p>Are you a patient? <a href="{% url 'login' %}">Login as a Patient</a></p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert">{{ message }}<a href="{% url 'login' %}">Login Again</a></div>
+            
+        {% endfor %}
+    {% endif %}
+    
 </body>
 </html>
 

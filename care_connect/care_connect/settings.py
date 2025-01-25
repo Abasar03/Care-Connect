@@ -51,7 +51,7 @@ INTERNAL_IPS=[
 ]
 
 # path of nodejs file in your laptop
-NPM_BIN_PATH=r"G:\nodejs\npm.cmd"
+NPM_BIN_PATH=r"C:\Program Files\nodejs\npm.cmd"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -95,9 +95,9 @@ WSGI_APPLICATION = 'care_connect.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'careconnect',
+        'NAME': 'care connect',
         'USER': 'postgres',
-        'PASSWORD': 'localhost',
+        'PASSWORD': 'LewondoskI@09',
         'HOST': 'localhost',
         'PORT': '5432', 
     }

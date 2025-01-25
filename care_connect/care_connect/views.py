@@ -18,10 +18,6 @@ def doctors(request):
 def contact_us(request):
     return render(request,'contact_us.html')
 
-def doctor_login(request):
-    return render(request,'doctor_login.html')
-
-
 
 # Utility function to get database connection
 def get_db_connection():
@@ -37,113 +33,139 @@ def get_db_connection():
 # Registration View
 
 
-def register(request):
+def doctor_register(request):
     if request.method == 'POST':
-        role = request.POST.get('role')
         name = request.POST['name']
         email = request.POST['email']
-        password = request.POST['password']
-        
-        hashed_password = make_password(password)
+        password = make_password(request.POST['password'])
+        specialization = request.POST['specialization']
+        schedule = request.POST['schedule']
+        contact_num = request.POST['contact_num']
 
         conn = get_db_connection()
         cursor = conn.cursor()
-
-        if role == 'doctor':
-            dep_name = request.POST.get('department')
-            print("HEYYY")
-            print(dep_name)
-            cursor.execute("SELECT dep_id FROM department WHERE name = %s", (dep_name,))
-            dep_row = cursor.fetchone()
-            print(dep_row)
-            
-            if dep_row:
-                dep_id = dep_row[0]
-                print(dep_id)
-            else:
-                messages.error(request, "Invalid department selected.")
-                return render(request, 'register.html')
-            
-            specialization = request.POST.get('specialization')
-            schedule = request.POST.get('schedule')
-            contact_num = request.POST.get('contact_num')
-            dep_id = request.POST.get('dep_id')
-            cursor.execute(
-                "INSERT INTO doctor (name, email, password, specialization, contact_num, schedule, dep_id) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-                (name, email, hashed_password, specialization, contact_num, schedule, dep_id)
-            )
-        elif role == 'patient':
-            age = request.POST.get('age')
-            gender = request.POST.get('gender')
-            contact_num = request.POST.get('contact_num')
-            address = request.POST.get('address')
-            cursor.execute(
-                "INSERT INTO patient (name, age, gender, contact_num, address, email, password) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-                (name, age, gender, contact_num, address, email, hashed_password)
-            )
-
+        
+        cursor.execute("select dep_id from department where name=%s",(specialization,))
+        result = cursor.fetchone()
+        
+        if not result:
+            messages.error(request,"Department not found")
+            return redirect('doctor_register')
+        
+        dep_id = result[0]
+        
+        cursor.execute(
+            "INSERT INTO doctor (name, email, password, specialization, contact_num, schedule,dep_id) VALUES (%s, %s, %s, %s, %s, %s,%s)",
+            (name, email, password, specialization, contact_num, schedule,dep_id),
+        )
         conn.commit()
         cursor.close()
         conn.close()
-        messages.success(request, "Registration successful.")
-        return redirect('login')
 
-    else:
-        # Fetching departments for the form
+        messages.success(request, "Doctor registered successfully.")
+        return redirect('doctor_login')
+
+    # Fetch departments for dropdown
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT dep_id, name FROM department")
+    departments = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    return render(request, 'doctor_register.html', {'departments': departments})
+
+
+def patient_register(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        password = make_password(request.POST['password'])
+        age = request.POST.get('age')
+        gender = request.POST['gender']
+        contact_num = request.POST['contact_num']
+        address = request.POST.get('address')
+
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT dep_id, name FROM department")
-        departments = cursor.fetchall()
+        cursor.execute(
+            "INSERT INTO patient (name, age, gender, contact_num, address, email, password) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+            (name, age, gender, contact_num, address, email, password),
+        )
+        conn.commit()
         cursor.close()
         conn.close()
 
-        return render(request, 'register.html', {'departments': departments})
-# Login View for Admin, Doctor, and Patient
-def login(request):
+        messages.success(request, "Patient registered successfully.")
+        return redirect('login')
+
+    return render(request, 'patient_register.html')
+    
+# Login View for Admin, Doctor, and Patientdef doctor_login(request):
+def doctor_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        
-        print(f"{email}\n{password}")
+
+        print(f"Doctor Login - Email: {email}, Password: {password}")
 
         conn = get_db_connection()
         cursor = conn.cursor()
 
         try:
             # Check Doctor Table
-            with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM doctor where email=%s", [email])
-                doctor = cursor.fetchall()
-                print(doctor)
+            cursor.execute("SELECT * FROM doctor WHERE email=%s", [email])
+            doctor = cursor.fetchone()
+            print(f"Doctor data: {doctor}")
 
-                if doctor:
-                    # Assuming password is the 7th field in the doctor table (adjust as needed)
-                    stored_password = doctor[7]
-                    print(f"Entered password is and stored pas(password,{stored_password}")
-                
-                    if check_password(password, stored_password):
-                        print(f"Entered password is{stored_password}")
+            if doctor:
+                stored_password = doctor[6]  # Adjust this based on the actual table structure
+                username=doctor[0]
+                print(f"Stored password: {stored_password}")
 
-                        return redirect('doctor_dashboard')
+                if check_password(password,stored_password):
+                    print(f"Password match for doctor: {email}")
+                    return redirect('doctor_dashboard',username=username)
 
-                # Check Patient Table
-                cursor.execute("SELECT * FROM patient WHERE email=%s", [email])
-                patient = cursor.fetchone()
-                print(patient)
-
-                if patient:
-                    # Assuming password is the 6th field in the patient table (adjust as needed)
-                    stored_password = patient[7]
-                    print(f"stored_password: {stored_password}")
-                    if check_password(password, stored_password):
-                        print(f"Entered password is and stored pas(password,{stored_password}")
-                        return redirect('/dashboard/patient_dashboard')
-
-                # If no matching user or invalid password
-                messages.error(request, "Invalid email or password.")
+            # If no matching user or invalid password
+            messages.error(request, "Invalid email or password.")
         finally:
-                # Ensure cursor and connection are closed
-                cursor.close()
-                conn.close()
+            cursor.close()
+            conn.close()
+
+    return render(request, 'doctor_login.html')
+
+
+def login(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        print(f"Patient Login - Email: {email}, Password: {password}")
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        try:
+            # Check Patient Table
+            cursor.execute("SELECT * FROM patient WHERE email=%s", [email])
+            patient = cursor.fetchone()
+            print(f"Patient data: {patient}")
+
+            if patient:
+                # Assuming password is the 6th field in the patient table (adjust index as needed)
+                stored_password = patient[7]  # Adjust this based on the actual table structure
+                username=patient[0]
+                print(f"Stored password: {stored_password}")
+
+                if check_password(password, stored_password):
+                    print(f"Password match for patient: {email}")
+                    return redirect('patient_dashboard',username=username)
+
+            # If no matching user or invalid password
+            messages.error(request, "Invalid email or password.")
+        finally:
+            cursor.close()
+            conn.close()
 
     return render(request, 'login.html')

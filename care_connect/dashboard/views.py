@@ -1,10 +1,10 @@
 from django.shortcuts import render
 
-def patient_dashboard(request):
-    return render(request, 'dashboard/patient_dashboard.html')
+def patient_dashboard(request, username):
+    return render(request, 'patient_dashboard.html', {'username': username})
 
-def doctor_dashboard(request):
-    return render(request, 'dashboard/doctor_dashboard.html')
+def doctor_dashboard(request, username):
+    return render(request, 'doctor_dashboard.html', {'username': username})
 
-def admin_dashboard(request):
-    return render(request, 'dashboard/admin_dashboard.html')
+def admin_dashboard(request, username):
+    return render(request, 'admin_dashboard.html', {'username': username})

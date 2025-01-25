@@ -1,71 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h2 class="text-center text-3xl font-bold text-sky-600 mb-6">Doctor Login</h2>
+<form method="POST" class="max-w-md mx-auto p-6 bg-white border border-blue-300 rounded-lg shadow-md">
+    {% csrf_token %}
+    
+    <!-- Email -->
+    <input type="email" name="email" placeholder="Email" required class="w-full p-2 mb-4 border border-blue-300 rounded-lg focus:ring-2 focus:ring-sky-500">
+    
+    <!-- Password -->
+    <input type="password" name="password" placeholder="Password" required class="w-full p-2 mb-4 border border-blue-300 rounded-lg focus:ring-2 focus:ring-sky-500">
+    
+    <!-- Submit Button -->
+    <button type="submit" class="w-full p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200">Login</button>
+</form>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Login</title>
-</head>
-<body class="bg-gradient-to-r from-sky-500 to-blue-500 min-h-screen">
-    <div class="bg-white flex flex-col justify-center rounded-lg shadow-lg p-8 w-96">
-        <h2 class="text-2xl font-bold text-center text-blue-600 mb-6">Doctor Login</h2>
-        <p class="text-center mt-4">Don't have an account? <a href="{% url 'register' %}" class="text-sky-500 hover:underline">Signup here</a></p>
+<p class="text-center mt-4">Don't have an account? <a href="{% url 'doctor_register' %}" class="text-sky-500 hover:underline">Signup here</a></p>
 
-        <form method="POST" action="{% url 'login' %}" class="space-y-6">
-            {% csrf_token %}
-        
-        <!-- Email Input -->
-        <div class="relative mb-4">
-            <input 
-                type="email" 
-                name="email" 
-                id="email" 
-                placeholder=" " 
-                required 
-                class="peer w-full px-4 py-2 border border-gray-300  rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
-            >
-            <label 
-                for="email" 
-                class="absolute left-3 top-2.5 text-gray-500 peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 transition-none text-sm peer-focus:invisible peer-valid:invisible pointer-events-none"
-            >
-                Enter your Email
-            </label>
-        </div>
+<!-- Link to Patient Login -->
+<p class="text-center mt-4">Are you a patient? <a href="{% url 'login' %}" class="text-sky-500 hover:underline">Login as a Patient</a></p>
 
-        <!-- Password Input -->
-        <div class="relative mb-4">
-            <input 
-                type="password" 
-                name="password" 
-                id="password" 
-                placeholder=" " 
-                required 
-                class="peer w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
-            >
-            <label 
-                for="password" 
-                class="absolute left-3 top-2.5 text-gray-500 peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 transition-none text-sm peer-focus:invisible peer-valid:invisible pointer-events-none"
-            >
-                Enter your Password
-            </label>
-        </div>
-
-        <!-- Submit Button -->
-        <button 
-            type="submit" 
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-all"
-        >
-            Login
-        </button>
-    </form>
-
-    <p class="text-sm text-center text-gray-600 mt-4">
-        Are you a patient? 
-        <a href="{% url 'login' %}" class="text-blue-500 hover:underline">Login as a Patient</a>
-    </p></body>
-</html>
-
+<!-- Display Messages -->
+{% if messages %}
+    <div class="flex justify-center mt-6">
+        {% for message in messages %}
+            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-600 p-4 rounded-lg shadow-lg w-3/4 text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
 {% endblock %}

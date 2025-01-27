@@ -18,8 +18,10 @@ def doctors(request):
 def contact_us(request):
     return render(request,'contact_us.html')
 
+def index(request):
+    return render(request, 'index.html')
 
-# Utility function to get database connection
+# Database connection
 def get_db_connection():
     return psycopg2.connect(
         dbname=settings.DATABASES['default']['NAME'],
@@ -28,9 +30,6 @@ def get_db_connection():
         host=settings.DATABASES['default']['HOST'],
         port=settings.DATABASES['default']['PORT']
     )
-
-
-# Registration View
 
 
 def doctor_register(request):
@@ -65,7 +64,6 @@ def doctor_register(request):
         messages.success(request, "Doctor registered successfully.")
         return redirect('doctor_login')
 
-    # Fetch departments for dropdown
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT dep_id, name FROM department")
@@ -101,7 +99,7 @@ def patient_register(request):
 
     return render(request, 'patient_register.html')
     
-# Login View for Admin, Doctor, and Patientdef doctor_login(request):
+
 def doctor_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -113,21 +111,22 @@ def doctor_login(request):
         cursor = conn.cursor()
 
         try:
-            # Check Doctor Table
             cursor.execute("SELECT * FROM doctor WHERE email=%s", [email])
             doctor = cursor.fetchone()
             print(f"Doctor data: {doctor}")
 
             if doctor:
-                stored_password = doctor[6]  # Adjust this based on the actual table structure
-                username=doctor[0]
+                stored_password = doctor[6]  
+                full_username=doctor[1]
+                
+                username = full_username.split(' ', 1)[0]
+                
                 print(f"Stored password: {stored_password}")
 
                 if check_password(password,stored_password):
                     print(f"Password match for doctor: {email}")
-                    return redirect('doctor_dashboard',username=username)
+                    return redirect(f'/doctor_dashboard/{username}/')
 
-            # If no matching user or invalid password
             messages.error(request, "Invalid email or password.")
         finally:
             cursor.close()
@@ -147,22 +146,20 @@ def login(request):
         cursor = conn.cursor()
 
         try:
-            # Check Patient Table
             cursor.execute("SELECT * FROM patient WHERE email=%s", [email])
             patient = cursor.fetchone()
             print(f"Patient data: {patient}")
 
             if patient:
-                # Assuming password is the 6th field in the patient table (adjust index as needed)
-                stored_password = patient[7]  # Adjust this based on the actual table structure
-                username=patient[0]
-                print(f"Stored password: {stored_password}")
+                stored_password = patient[7]  
+                full_username = patient[1]  
+
+                username = full_username.split(' ', 1)[0]
 
                 if check_password(password, stored_password):
                     print(f"Password match for patient: {email}")
-                    return redirect('patient_dashboard',username=username)
+                    return redirect(f'/patient_dashboard/{username}/')
 
-            # If no matching user or invalid password
             messages.error(request, "Invalid email or password.")
         finally:
             cursor.close()

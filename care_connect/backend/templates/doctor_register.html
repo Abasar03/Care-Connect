@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="text-center text-3xl font-bold text-sky-600 mb-6">Doctor Registration</h2>
+<form method="POST" action="{% url 'doctor_register' %}" class="max-w-md mx-auto p-6 bg-white border border-blue-300 rounded-lg shadow-md">
+    {% csrf_token %}
+    
+    <!-- Name -->
+    <input type="text" name="name" placeholder="Name" required class="w-full p-2 mb-4 border border-blue-300 rounded-lg focus:ring-2 focus:ring-sky-500">
+    
+    <!-- Email -->
+    <input type="email" name="email" placeholder="Email" required class="w-full p-2 mb-4 border border-blue-300 rounded-lg focus:ring-2 focus:ring-sky-500">
+    
+    <!-- Password -->
+    <input type="password" name="password" placeholder="Password" required class="w-full p-2 mb-4 border border-blue-300 rounded-lg focus:ring-2 focus:ring-sky-500">
+    
+    <!-- Department -->
+    <label for="specialization" class="block font-semibold mb-2">Select Department:</label>
+    <select name="specialization" id="specialization" required class="w-full p-2 mb-4 border border-blue-300 rounded-lg focus:ring-2 focus:ring-sky-500">
+        {% for dep_id, name in departments %}
+        <option value="{{ name }}">{{ name }}</option>
+        {% endfor %}
+    </select>
+    
+    <!-- Schedule -->
+    <label for="schedule" class="block font-semibold mb-2">Schedule:</label>
+    <select name="schedule" id="schedule" required class="w-full p-2 mb-4 border border-blue-300 rounded-lg focus:ring-2 focus:ring-sky-500">
+        <option value="free">Free</option>
+        <option value="busy">Busy</option>
+    </select>
+    
+    <!-- Contact Number -->
+    <input type="number" name="contact_num" placeholder="Contact Number" required class="w-full p-2 mb-4 border border-blue-300 rounded-lg focus:ring-2 focus:ring-sky-500">
+    
+    <!-- Submit Button -->
+    <button type="submit" class="w-full p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200">Register</button>
+</form>
+
+<!-- Link to Login Page -->
+<p class="text-center mt-4">Already have an account? <a href="{% url 'doctor_login' %}" class="text-sky-500 hover:underline">Login here</a></p>
+{% endblock %}

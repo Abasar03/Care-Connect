@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Care Connect{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Custom CSS for sticky footer */
+        html, body {
+            height: 100%;
+        }
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .content {
+            flex: 1;
+        }
+        /* Sidebar and overlay styles */
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar.closed {
+            transform: translateX(-100%);
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+        }
+        .overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Wrapper for sticky footer -->
+    <div class="wrapper">
+        <!-- Header -->
+        <header class="bg-blue-600 text-white py-4 fixed top-0 w-full z-30 flex justify-between items-center px-4">
+            <div class="container mx-auto text-center">
+                <h1 class="text-3xl font-semibold">
+                    <i class="fas fa-user-md mr-2 text-4xl"></i>
+                    Patient Dashboard
+                </h1>
+            </div>
+            <button
+                class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline-red active:bg-red-800 transform hover:scale-105 transition-transform duration-300 ease-in-out"
+                onclick="window.location.href='/'">
+                <i class="fas fa-sign-out-alt mr-2"></i>
+                Logout
+            </button>
+        </header>
+
+        <!-- Sidebar -->
+        <div class="sidebar fixed top-0 left-0 h-full bg-white border-r z-40 w-64 lg:w-72 xl:w-80">
+            <!-- Close Button (Visible on Mobile) -->
+            <button
+                aria-label="Close sidebar"
+                class="p-2 absolute top-4 right-4 text-gray-600 hover:text-gray-900 md:hidden"
+                onclick="toggleSidebar()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- Sidebar Content -->
+            <div class="flex flex-col items-center p-6 border-b">
+                <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    <i class="fas fa-user text-blue-600 text-3xl"></i>
+                </div>
+                <p class="text-lg font-semibold">{{ full_username }}</p>
+            </div>
+
+            <!-- Sidebar Links -->
+            <nav aria-label="Sidebar">
+                <ul class="flex flex-col items-start p-6 space-y-6">
+                    <li>
+                        <a href="/patient_dashboard/{{ username }}/" class="flex items-center gap-3 py-2 px-4 w-full rounded-md text-gray-800 hover:bg-blue-50 focus:ring-2 focus:ring-blue-400">
+                            <i class="fas fa-th text-blue-600"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/appointment" class="flex items-center gap-3 py-2 px-4 w-full rounded-md text-gray-800 hover:bg-blue-50 focus:ring-2 focus:ring-blue-400">
+                            <i class="fas fa-calendar text-blue-600"></i>
+                            <span>Appointments</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/myprofile" class="flex items-center gap-3 py-2 px-4 w-full rounded-md text-gray-800 hover:bg-blue-50 focus:ring-2 focus:ring-blue-400">
+                            <i class="fas fa-users text-blue-600"></i>
+                            <span>Total appointments</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/myprofile" class="flex items-center gap-3 py-2 px-4 w-full rounded-md text-gray-800 hover:bg-blue-50 focus:ring-2 focus:ring-blue-400">
+                            <i class="fas fa-file-medical text-blue-600 text-2xl"></i>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/myprofile" class="flex items-center gap-3 py-2 px-4 w-full rounded-md text-gray-800 hover:bg-blue-50 focus:ring-2 focus:ring-blue-400">
+                            <i class="fas fa-user text-blue-600"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <button
+                            onclick="window.location.href='/logout'"
+                            class="flex items-center gap-3 py-2 px-4 w-full rounded-md text-gray-800 hover:bg-blue-50 focus:ring-2 focus:ring-blue-400">
+                            <i class="fas fa-sign-out-alt text-blue-600"></i>
+                            <span>Log out</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Overlay for Mobile (Visible when sidebar is open) -->
+        <div class="overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Main Content -->
+        <main class="content container mx-auto max-w-screen-xl flex-col p-8 mt-12 ml-64 lg:ml-72 xl:ml-80">
+            {% block content %}
+            <!-- Content will be overridden by child templates -->
+            {% endblock %}
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-8">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <!-- Left Section -->
+                    <div class="mb-4 md:mb-0">
+                        <h2 class="text-xl font-bold">Care Connect</h2>
+                        <p class="text-sm text-gray-400">
+                            © 2023 All rights reserved.
+                        </p>
+                    </div>
+
+                    <!-- Middle Section -->
+                    <ul class="flex space-x-6 text-sm">
+                        <li>
+                            <a href="/about" class="hover:text-blue-400 transition-colors">About</a>
+                        </li>
+                        <li>
+                            <a href="/services" class="hover:text-blue-400 transition-colors">Services</a>
+                        </li>
+                        <li>
+                            <a href="/contact" class="hover:text-blue-400 transition-colors">Contact</a>
+                        </li>
+                        <li>
+                            <a href="/privacy" class="hover:text-blue-400 transition-colors">Privacy Policy</a>
+                        </li>
+                    </ul>
+
+                    <!-- Right Section -->
+                    <div class="flex space-x-4">
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="hover:text-blue-400 transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="hover:text-blue-400 transition-colors">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="hover:text-blue-400 transition-colors">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Toggle Button for Mobile (Visible on Small Screens) -->
+        <button
+            aria-label="Toggle sidebar"
+            class="p-2 fixed top-4 left-4 z-50 bg-blue-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 md:hidden"
+            onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- JavaScript for Sidebar Toggle -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            sidebar.classList.toggle('closed');
+            overlay.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

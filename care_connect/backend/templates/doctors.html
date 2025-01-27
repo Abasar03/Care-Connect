@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meet Our Doctors</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-blue-500 to-sky-500 min-h-screen flex items-center justify-center">
+    <div class="container mx-auto p-6">
+        <h2 class="text-3xl font-bold text-center text-blue-600 mb-6">Meet Our Doctors</h2>
+        <p class="text-gray-600 text-center mb-8">
+            Our team of dedicated doctors is here to provide you with the best care:
+        </p>
+                <ul class="space-y-4">
+                    <li class="flex items-center">
+                        <div class="bg-blue-100 text-blue-600 rounded-full w-8 h-8 flex items-center justify-center font-bold">1</div>
+                        <span class="ml-4 text-gray-700 font-medium">Dr. John Doe - Cardiologist</span>
+                    </li>
+                    <li class="flex items-center">
+                        <div class="bg-blue-100 text-blue-600 rounded-full w-8 h-8 flex items-center justify-center font-bold">2</div>
+                        <span class="ml-4 text-gray-700 font-medium">Dr. Jane Smith - Neurologist</span>
+                    </li>
+                    <li class="flex items-center">
+                        <div class="bg-blue-100 text-blue-600 rounded-full w-8 h-8 flex items-center justify-center font-bold">3</div>
+                        <span class="ml-4 text-gray-700 font-medium">Dr. Emily Johnson - Orthopedic Surgeon</span>
+                    </li>
+                    <li class="flex items-center">
+                        <div class="bg-blue-100 text-blue-600 rounded-full w-8 h-8 flex items-center justify-center font-bold">4</div>
+                        <span class="ml-4 text-gray-700 font-medium">Dr. Michael Brown - Pediatrician</span>
+                    </li>
+                    <li class="flex items-center">
+                        <div class="bg-blue-100 text-blue-600 rounded-full w-8 h-8 flex items-center justify-center font-bold">5</div>
+                        <span class="ml-4 text-gray-700 font-medium">Dr. Linda Davis - Emergency Medicine Specialist</span>
+                    </li>
+                    <li class="flex items-center">
+                        <div class="bg-blue-100 text-blue-600 rounded-full w-8 h-8 flex items-center justify-center font-bold">6</div>
+                        <span class="ml-4 text-gray-700 font-medium">Dr. John Cena - Dermatologist</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for doctor in doctors %}
+                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+                    <h3 class="text-xl font-semibold text-blue-600 mb-2">{{ doctor.name }}</h3>
+                    <p class="text-gray-700 font-medium">{{ doctor.specialty }}</p>
+                    <p class="text-sm text-gray-500 mt-2">More details available in the file.</p>
+                    <a 
+                        href="{{ doctor.details_file_url }}" 
+                        class="inline-block mt-4 text-sm text-blue-500 hover:underline"
+                        target="_blank"
+                    >
+                        View Details
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

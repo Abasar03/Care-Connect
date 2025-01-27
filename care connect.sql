@@ -37,7 +37,6 @@ CREATE TABLE patient (
     email VARCHAR(150) NOT NULL UNIQUE,          
     password VARCHAR(255) NOT NULL,                                           
     admin_id INT,                              
-    FOREIGN KEY (dep_id) REFERENCES department(dep_id) ON DELETE SET NULL,
     FOREIGN KEY (admin_id) REFERENCES admin(admin_id) ON DELETE SET NULL
 );
 
@@ -66,3 +65,13 @@ CREATE TABLE report (
     FOREIGN KEY (patient_id) REFERENCES patient(patient_id) ON DELETE SET NULL,
     FOREIGN KEY (admin_id) REFERENCES admin(admin_id) ON DELETE SET NULL
 );
+
+INSERT INTO department (name, location, admin_id)
+VALUES 
+    ('Cardiology', 'Building A'),
+    ('Neurology', 'Building B'),
+    ('Orthopedics', 'Building C'),
+    ('Pediatrics', 'Building A'),
+    ('Medicine', 'Building B'),
+    ('Dermatology', 'Building C');
+

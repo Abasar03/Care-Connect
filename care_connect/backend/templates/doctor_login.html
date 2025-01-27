@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="text-center text-3xl font-bold text-sky-600 mb-6">Doctor Login</h2>
+<form method="POST" class="max-w-md mx-auto p-6 bg-white border border-blue-300 rounded-lg shadow-md">
+    {% csrf_token %}
+    
+    <!-- Email -->
+    <input type="email" name="email" placeholder="Email" required class="w-full p-2 mb-4 border border-blue-300 rounded-lg focus:ring-2 focus:ring-sky-500">
+    
+    <!-- Password -->
+    <input type="password" name="password" placeholder="Password" required class="w-full p-2 mb-4 border border-blue-300 rounded-lg focus:ring-2 focus:ring-sky-500">
+    
+    <!-- Submit Button -->
+    <button type="submit" class="w-full p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200">Login</button>
+</form>
+
+<p class="text-center mt-4">Don't have an account? <a href="{% url 'doctor_register' %}" class="text-sky-500 hover:underline">Signup here</a></p>
+
+<!-- Link to Patient Login -->
+<p class="text-center mt-4">Are you a patient? <a href="{% url 'login' %}" class="text-sky-500 hover:underline">Login as a Patient</a></p>
+
+<!-- Display Messages -->
+{% if messages %}
+    <div class="flex justify-center mt-6">
+        {% for message in messages %}
+            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-600 p-4 rounded-lg shadow-lg w-3/4 text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

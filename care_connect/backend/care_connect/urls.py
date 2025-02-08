@@ -27,11 +27,13 @@ urlpatterns = [
     path('doctors/', views.doctors, name='doctors'),
     path('contact-us/', views.contact_us, name='contact_us'),
     path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
     path('doctor-login/', views.doctor_login, name='doctor_login'),
     path('register/doctor/', views.doctor_register, name='doctor_register'),
     path('register/patient/', views.patient_register, name='patient_register'),
-    path('patient_dashboard/<str:username>/', dashboard_views.patient_dashboard, name='patient_dashboard'),
-    path('doctor_dashboard/<str:username>/', dashboard_views.doctor_dashboard, name='doctor_dashboard'),
+    path('patient_dashboard/<int:patient_id>/', dashboard_views.patient_dashboard, name='patient_dashboard'),
+    path('doctor_dashboard/<int:doctor_id>/', dashboard_views.doctor_dashboard, name='doctor_dashboard'),
+    path('dashboard/', include('dashboard.urls')),
     path('__reload__/', include("django_browser_reload.urls")),
 ]
 

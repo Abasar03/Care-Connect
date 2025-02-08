@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Doctors{% endblock %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+
+    <!-- Doctor Selection -->
+    <label for="doctor" class="block font-semibold mt-2">Select Doctor:</label>
+    <select id="doctor" name="doctor" required class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        {% for doctor in doctors %}
+            <option value="{{ doctor }}">{{ doctor }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Date Picker -->
+    <label for="date" class="block font-semibold mt-2">Select Date:</label>
+    <input type="date" id="date" name="date" required 
+           class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+    
+    <!-- Time Slots -->
+    <label for="time" class="block font-semibold mt-2">Available Time Slots:</label>
+    <select id="time" name="time" required 
+        class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        {% for time in available_times %}
+            <option value="{{ time }}">{{ time }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Appointment Type -->
+    <label for="status" class="block font-semibold mt-2">Select Appointment Type:</label>
+    <select name="status" id="status" required 
+            class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="online">Online</option>
+        <option value="physical">Physical</option>
+    </select>
+
+    <!-- Submit Button -->
+    <button type="submit"
+            class="mt-4 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">
+        Book Appointment
+    </button>
+</form>
+{% endblock %}
+
+<!-- JavaScript for handling the form and dynamic time slot fetching -->
+<script>
+    async function getAvailableTimes() {
+        const doctorSelect = document.getElementById('doctor');
+        const dateInput = document.getElementById('date');
+        const selectedDoctorId = doctorSelect.value;
+        const selectedDate = dateInput.value;
+        console.log("Doctor selected:", selectedDoctorId);
+    
+        // Only show the form if a doctor is selected and a date is chosen
+        if (!selectedDoctorId || !selectedDate) {
+            document.getElementById('appointment-form').classList.add("hidden");
+            return;
+        }
+    
+        try {
+            const response = await fetch(`/appointment/?doctor=${selectedDoctorId}&date=${selectedDate}`, {
+                method: 'POST'
+            });
+    
+            const data = await response.json();
+            const availableTimes = data.available_times;
+    
+            if (availableTimes.length > 0) {
+                // Show the appointment form
+                document.getElementById('appointment-form').classList.remove("hidden");
+    
+                // Populate the time slots dropdown
+                const timeSelect = document.getElementById('time');
+                timeSelect.innerHTML = '';  // Clear existing options
+                availableTimes.forEach(time => {
+                    const option = document.createElement('option');
+                    option.value = time;
+                    option.textContent = time;
+                    timeSelect.appendChild(option);
+                });
+            } else {
+                // Handle no available times
+                alert("No available time slots for this doctor on the selected date.");
+            }
+        } catch (error) {
+            console.error('Error fetching available times:', error);
+            alert('Error fetching available times. Please try again later.');
+        }
+    }
+    
+    async function bookAppointment(event) {
+        event.preventDefault();
+    
+        const formData = new FormData();
+        formData.append("doctor", document.getElementById("doctor").value);
+        formData.append("date", document.getElementById("date").value);
+        formData.append("time", document.getElementById("time").value);
+        formData.append("type", document.getElementById("status").value);
+    
+        try {
+            const response = await fetch(`/appointment/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                },
+                body: formData 
+            });
+    
+            const data = await response.json();
+            alert(data.message || "Appointment booked successfully!");
+        } catch (error) {
+            console.error("Booking failed:", error);
+            alert("Failed to book appointment.");
+        }
+    }
+    </script>

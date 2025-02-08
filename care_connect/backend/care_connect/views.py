@@ -21,6 +21,8 @@ def contact_us(request):
 def index(request):
     return render(request, 'index.html')
 
+def logout(request):
+    return redirect(request,'logout.html')
 # Database connection
 def get_db_connection():
     return psycopg2.connect(
@@ -117,15 +119,15 @@ def doctor_login(request):
 
             if doctor:
                 stored_password = doctor[6]  
-                full_username=doctor[1]
-                
-                username = full_username.split(' ', 1)[0]
+                user_id = doctor[0]
+                request.session['user_id'] = doctor[0]
+                request.session['user_type'] = 'doctor'
                 
                 print(f"Stored password: {stored_password}")
 
                 if check_password(password,stored_password):
                     print(f"Password match for doctor: {email}")
-                    return redirect(f'/doctor_dashboard/{username}/')
+                    return redirect(f'/doctor_dashboard/{user_id}/')
 
             messages.error(request, "Invalid email or password.")
         finally:
@@ -133,6 +135,7 @@ def doctor_login(request):
             conn.close()
 
     return render(request, 'doctor_login.html')
+
 
 
 def login(request):
@@ -152,13 +155,13 @@ def login(request):
 
             if patient:
                 stored_password = patient[7]  
-                full_username = patient[1]  
-
-                username = full_username.split(' ', 1)[0]
+                user_id = patient[0]
+                request.session['user_id'] = patient[0]
+                request.session['user_type'] = 'patient'
 
                 if check_password(password, stored_password):
                     print(f"Password match for patient: {email}")
-                    return redirect(f'/patient_dashboard/{username}/')
+                    return redirect(f'/patient_dashboard/{user_id}/')
 
             messages.error(request, "Invalid email or password.")
         finally:

@@ -43,7 +43,7 @@ CREATE TABLE patient (
 CREATE TABLE appointment (
     appointment_id SERIAL PRIMARY KEY, 
     date DATE,
-    time TIME,
+    time VARCHAR(50),
     status VARCHAR(50),                               
     doctor_id INT,
     patient_id INT,

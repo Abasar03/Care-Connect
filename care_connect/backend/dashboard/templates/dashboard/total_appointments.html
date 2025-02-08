@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}My Appointments{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-4">My Appointments</h2>
+
+    {% if appointments %}
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white rounded-lg shadow-md">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 bg-blue-500 text-white">Date</th>
+                    <th class="py-2 px-4 bg-blue-500 text-white">Time</th>
+                    <th class="py-2 px-4 bg-blue-500 text-white">Status</th>
+                    <th class="py-2 px-4 bg-blue-500 text-white">Doctor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr class="border-b">
+                    <!-- Adjust the indexes below based on your appointment tuple structure -->
+                    <td class="py-2 px-4">{{ appointment.1 }}</td>
+                    <td class="py-2 px-4">{{ appointment.2 }}</td>
+                    <td class="py-2 px-4">{{ appointment.3 }}</td>
+                    <td class="py-2 px-4">{{ appointment.4 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-gray-500">You have no appointments scheduled.</p>
+    {% endif %}
+</div>
+{% endblock %}

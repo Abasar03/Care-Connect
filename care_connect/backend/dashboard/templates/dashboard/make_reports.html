@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Prepare Report{% endblock %}
+
+{% block content %}
+<form method="POST" class="p-6 bg-white rounded-lg shadow-md">
+    {% csrf_token %}
+
+    <!-- Doctor Name (Pre-Filled, Read-Only) -->
+    <label for="doctor" class="block font-semibold mt-2">Examined By:</label>
+    <input type="text" id="doctor" name="doctor" value="{{ doctor_name }}" readonly 
+           class="w-full p-2 border rounded-md bg-gray-100 text-gray-700 cursor-not-allowed">
+
+    <!-- Patient Name (Pre-Filled, Read-Only) -->
+    <label for="patient" class="block font-semibold mt-2">Patient Name:</label>
+    <input type="text" id="patient" name="patient" value="{{ patient_name }}" readonly 
+           class="w-full p-2 border rounded-md bg-gray-100 text-gray-700 cursor-not-allowed">
+
+    <!-- Diagnosis Input -->
+    <label for="diagnosis" class="block font-semibold mt-2">Diagnosis:</label>
+    <input type="text" id="diagnosis" name="diagnosis" required 
+           class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+    <!-- Treatment Input -->
+    <label for="treatment" class="block font-semibold mt-2">Treatment:</label>
+    <textarea id="treatment" name="treatment" required 
+              class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+
+    <!-- Date Input -->
+    <label for="date" class="block font-semibold mt-2">Date:</label>
+    <input type="text" id="date" name="date" value="{{ date }}" readonly 
+           class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+    <!-- Submit Button -->
+    <button type="submit"
+            class="mt-4 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">
+        Save Record
+    </button>
+</form>
+{% endblock %}
+

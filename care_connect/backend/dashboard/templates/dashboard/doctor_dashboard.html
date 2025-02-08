@@ -109,15 +109,9 @@
         <nav aria-label="Sidebar">
             <ul class="p-6 space-y-6">
                 <li>
-                    <a href="/appointments" class="flex items-center gap-3 py-2 px-4 rounded-md text-gray-800 hover:bg-green-50">
+                    <a href="{% url 'my_appointments' %}" class="flex items-center gap-3 py-2 px-4 rounded-md text-gray-800 hover:bg-green-50">
                         <i class="fas fa-calendar-check text-green-600"></i>
-                        <span>Appointments</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/patients" class="flex items-center gap-3 py-2 px-4 rounded-md text-gray-800 hover:bg-green-50">
-                        <i class="fas fa-users text-green-600"></i>
-                        <span>Total Patients</span>
+                        <span>My Appointments</span>
                     </a>
                 </li>
                 <li>

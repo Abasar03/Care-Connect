@@ -6,29 +6,33 @@
 <div class="container mx-auto p-6">
     <div class="bg-white p-6 rounded-lg shadow-md">
         <h2 class="text-2xl font-semibold mb-4">Appointment Details</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <p class="font-medium">Patient Name:</p>
-                <p>{{ appointment.patient_name }}</p>
+
+        {% if error_message %}
+            <p class="text-red-500">{{ error_message }}</p>
+        {% else %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <p class="font-medium">Patient Name:</p>
+                    <p>{{ appointment.patient_name }}</p>
+                </div>
+                <div>
+                    <p class="font-medium">Doctor Name:</p>
+                    <p>{{ appointment.doctor_name }}</p>
+                </div>
+                <div>
+                    <p class="font-medium">Date:</p>
+                    <p>{{ appointment.date }}</p>
+                </div>
+                <div>
+                    <p class="font-medium">Diagnosis:</p>
+                    <p>{{ appointment.diagnosis }}</p>
+                </div>
+                <div>
+                    <p class="font-medium">Treatment:</p>
+                    <p>{{ appointment.treatment }}</p>
+                </div>
             </div>
-            <div>
-                <p class="font-medium">Doctor Name:</p>
-                <p>{{ appointment.doctor_name }}</p>
-            </div>
-            <div>
-                <p class="font-medium">Date:</p>
-                <p>{{ appointment.date }}</p>
-            </div>
-            <div>
-                <p class="font-medium">Diagnosis:</p>
-                <p>{{ appointment.diagnosis }}</p>
-            </div>
-            <div>
-                <p class="font-medium">Treatment:</p>
-                <p>{{ appointment.treatment }}</p>
-            </div>
-        </div>
+        {% endif %}
         
         <div class="mt-6">
             <a href="{% url 'total_appointments' %}" class="text-blue-600 hover:text-blue-800">

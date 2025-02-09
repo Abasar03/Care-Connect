@@ -167,10 +167,19 @@ def my_appointments(request):
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    cursor.execute("SELECT a.*, p.name AS patient FROM appointment a JOIN patient p ON a.patient_id = p.patient_id WHERE a.doctor_id = %s;", [doctor_id])
-    appointments=cursor.fetchall()
+    cursor.execute("""
+        SELECT a.*, p.name AS patient, r.report_id
+        FROM appointment a 
+        JOIN patient p ON a.patient_id = p.patient_id
+        LEFT JOIN report r ON a.appointment_id = r.appointment_id
+        WHERE a.doctor_id = %s;
+    """, [doctor_id])
+    
+    appointments = cursor.fetchall()
     print(appointments)
+    
     return render(request, 'my_appointments.html', {'appointments': appointments})
+
 
 def make_reports(request,appointment_id):
     
@@ -237,6 +246,9 @@ def view_reports(request,appointment_id):
     appointment=cursor.fetchall()
     print("appointment",appointment)
 
+    if not appointment:  # If no report exists
+        return render(request, 'view_reports.html', {'error_message': 'Report yet to be generated.'})
+    
     appointment_details = {
         'appointment_id': appointment_id,
         'date': appointment[0][1],

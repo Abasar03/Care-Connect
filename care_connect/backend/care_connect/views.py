@@ -23,7 +23,7 @@ def index(request):
 
 def logout(request):
     return redirect(request,'logout.html')
-# Database connection
+
 def get_db_connection():
     return psycopg2.connect(
         dbname=settings.DATABASES['default']['NAME'],
@@ -182,7 +182,6 @@ def admin_login(request):
         if admin_data:
             hashed_password = admin_data[0]
 
-            # Create a new cursor for the second query
             with connection.cursor() as cursor:
                 cursor.execute("SELECT crypt(%s, %s) = %s", [password, hashed_password, hashed_password])
                 is_valid = cursor.fetchone()[0]

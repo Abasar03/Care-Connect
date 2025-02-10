@@ -1,11 +1,10 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
+from django.http import HttpResponse
 from care_connect.views import get_db_connection
-from django.http import JsonResponse
 from datetime import datetime,timedelta
 
 def patient_dashboard(request, patient_id):
-    # Query the patient profile using user_id
     conn = get_db_connection()
     cursor = conn.cursor()
     
@@ -14,7 +13,7 @@ def patient_dashboard(request, patient_id):
         patient_profile = cursor.fetchone()
         
         if patient_profile:
-            full_username = patient_profile[1]  # Assuming patient's name is stored in index 1
+            full_username = patient_profile[1] 
             return render(request, 'patient_dashboard.html', {'user_id': patient_id, 'full_username': full_username})
         else:
             return redirect('home')
@@ -24,7 +23,6 @@ def patient_dashboard(request, patient_id):
 
 
 def doctor_dashboard(request, doctor_id):
-    # Query the doctor profile using user_id
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -33,7 +31,7 @@ def doctor_dashboard(request, doctor_id):
         doctor_profile = cursor.fetchone()
         
         if doctor_profile:
-            full_username = doctor_profile[1]  # Assuming doctor's name is stored in index 1
+            full_username = doctor_profile[1]  
             return render(request, 'doctor_dashboard.html', {'user_id': doctor_id, 'full_username': full_username})
         else:
             return redirect('home')
@@ -56,7 +54,6 @@ def profile(request):
     print(user_id)
 
     try:
-        # Check if the user is a doctor
         if user_type == 'doctor':
             cursor.execute("SELECT * FROM doctor WHERE doctor_id = %s", [user_id])
             doctor_profile = cursor.fetchone()
@@ -70,7 +67,6 @@ def profile(request):
                     }
                 return render(request, 'doctor_profile.html', {'profile': profile_data})
 
-        # Check if the user is a patient
         elif user_type == 'patient':
             cursor.execute("SELECT * FROM patient WHERE patient_id = %s", [user_id])
             patient_profile = cursor.fetchone()
@@ -99,7 +95,7 @@ def make_appointments(request):
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM department")
     departments = [row[0] for row in cursor.fetchall()]
-    print("Departments:", departments)  # Debugging: check the list of departments
+    print("Departments:", departments) 
     return render(request, 'make_appointments.html', {'departments': departments})
 
 
@@ -107,7 +103,6 @@ def get_doctors(request, department):
     patient_id = request.session.get("user_id")
     print("Selected department:", department)
     
-    # Compute tomorrow's date in YYYY-MM-DD format
     tomorrow = (datetime.today().date() + timedelta(days=1)).isoformat()
     
     conn = get_db_connection()
@@ -121,7 +116,6 @@ def get_doctors(request, department):
         "12:00-13:00", "13:00-14:00", "14:00-15:00", "15:00-16:00"
     ]
     
-    # Check if a doctor and date are selected (either via GET or POST)
     selected_doctor = request.GET.get("doctor") or request.POST.get('doctor')
     selected_date = request.GET.get("date") or request.POST.get('date')
     
@@ -181,10 +175,14 @@ def total_appointments(request):
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    cursor.execute("SELECT a.*, d.name AS doctor, specialization FROM appointment a JOIN doctor d  ON a.doctor_id = d.doctor_id where a.patient_id = %s;",[patient_id])
-    appointments = cursor.fetchall()
+    cursor.execute("""
+        SELECT a.*, d.name AS doctor, d.specialization
+        FROM appointment a 
+        JOIN doctor d ON a.doctor_id = d.doctor_id
+        WHERE a.patient_id = %s;
+    """, [patient_id])
     
-    print("yo print vako ho\n")
+    appointments = cursor.fetchall()
     print(appointments)
     return render(request, 'total_appointments.html', {'appointments': appointments})
 
@@ -223,6 +221,7 @@ def make_reports(request,appointment_id):
         JOIN doctor d ON a.doctor_id = d.doctor_id
         WHERE a.appointment_id = %s;
     """, [appointment_id])
+    
     results=cursor.fetchall()
     print(results)
     patient = results[0][7]
@@ -269,10 +268,11 @@ def view_reports(request,appointment_id):
         JOIN doctor d ON r.doctor_id = d.doctor_id
         WHERE r.appointment_id = %s;
     """, [appointment_id])
+    
     appointment=cursor.fetchall()
     print("appointment",appointment)
 
-    if not appointment:  # If no report exists
+    if not appointment:  
         return render(request, 'view_reports.html', {'error_message': 'Report yet to be generated.'})
     
     appointment_details = {
@@ -316,6 +316,7 @@ def appointment_list(request):
         JOIN doctor d ON a.doctor_id = d.doctor_id
         LEFT JOIN report r ON a.appointment_id = r.appointment_id;
     """)
+    
     appointments = cursor.fetchall()
     print(appointments)
     return render(request, 'appointment_list.html', {'appointments': appointments})
@@ -328,59 +329,47 @@ def report_list(request):
     print(reports)
     return render(request, 'report_list.html', {'reports': reports})
 
-from django.db import connection
-from django.shortcuts import redirect
-from django.http import HttpResponse
-
 def delete_entity(request, entity_type, entity_id):
     if request.method == 'POST':
-        with connection.cursor() as cursor:
-            if entity_type == 'doctor':
-                # Delete all appointments related to this doctor
-                cursor.execute("DELETE FROM appointment WHERE doctor_id = %s", [entity_id])
-                
-                # Delete all reports related to this doctor
-                cursor.execute("DELETE FROM report WHERE doctor_id = %s", [entity_id])
-                
-                # Now delete the doctor
-                cursor.execute("DELETE FROM doctor WHERE doctor_id = %s", [entity_id])
-                
-                messages.success(request, "Doctor successfully removed!")  # Success message
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        if entity_type == 'doctor':
+            cursor.execute("DELETE FROM appointment WHERE doctor_id = %s", [entity_id])
+            
+            cursor.execute("DELETE FROM report WHERE doctor_id = %s", [entity_id])
+            
+            cursor.execute("DELETE FROM doctor WHERE doctor_id = %s", [entity_id])
+            
+            messages.success(request, "Doctor successfully removed!")  
 
+            return redirect('doctor_list')
 
-                return redirect('doctor_list')
+        elif entity_type == 'patient':
+            cursor.execute("DELETE FROM appointment WHERE patient_id = %s", [entity_id])
+            
+            cursor.execute("DELETE FROM report WHERE patient_id = %s", [entity_id])
+            
+            cursor.execute("DELETE FROM patient WHERE patient_id = %s", [entity_id])
 
-            elif entity_type == 'patient':
-                # Delete all appointments related to this patient
-                cursor.execute("DELETE FROM appointment WHERE patient_id = %s", [entity_id])
-                
-                # Delete all reports related to this patient
-                cursor.execute("DELETE FROM report WHERE patient_id = %s", [entity_id])
-                
-                # Now delete the patient
-                cursor.execute("DELETE FROM patient WHERE patient_id = %s", [entity_id])
+            messages.success(request, "Patient successfully removed!")  
 
-                messages.success(request, "Patient successfully removed!")  # Success message
+            return redirect('patient_list')
 
-                return redirect('patient_list')
+        elif entity_type == 'appointment':
+            cursor.execute("DELETE FROM appointment WHERE appointment_id = %s", [entity_id])
 
-            elif entity_type == 'appointment':
-                # Delete the appointment
-                cursor.execute("DELETE FROM appointment WHERE appointment_id = %s", [entity_id])
+            messages.success(request, "Appointment successfully removed!")  
 
-                messages.success(request, "Appointment successfully removed!")  # Success message
+            return redirect('appointment_list')
 
-                return redirect('appointment_list')
+        elif entity_type == 'report':
+            cursor.execute("DELETE FROM report WHERE report_id = %s", [entity_id])
 
-            elif entity_type == 'report':
-                # Delete the report
-                cursor.execute("DELETE FROM report WHERE report_id = %s", [entity_id])
+            messages.success(request, "Report successfully removed!")  
 
-                messages.success(request, "Report successfully removed!")  # Success message
+            return redirect('report_list')
 
-                return redirect('report_list')
-
-            else:
-                return HttpResponse("Invalid entity type", status=400)
+        else:
+            return HttpResponse("Invalid entity type", status=400)
 
     return HttpResponse("Invalid request", status=400)

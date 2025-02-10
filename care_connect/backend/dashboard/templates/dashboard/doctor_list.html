@@ -4,8 +4,12 @@
 
 {% block content %}
 <div class="container mx-auto p-6">
-    <h2 class="text-2xl font-bold mb-4">All Doctors</h2>
-
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold">All Patients</h2>
+        <a href="{% url 'doctor_register' %}" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700">
+            Add Doctor
+        </a>
+    </div>
     {% if doctors %}
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white rounded-lg shadow-md">

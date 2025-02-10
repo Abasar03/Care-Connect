@@ -2,10 +2,49 @@
 
 {% block title %}Doctors{% endblock %}
 
+{% if messages %}
+<div class="fixed top-4 right-4 space-y-2 z-50">
+    {% for message in messages %}
+    <div 
+        x-data="{ show: true }" 
+        x-init="setTimeout(() => show = false, 4000)" 
+        x-show="show" 
+        x-transition:enter="transition ease-out duration-300 transform"
+        x-transition:enter-start="opacity-0 scale-90"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-300 transform"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-90"
+        class="flex items-center px-4 py-3 rounded-lg shadow-md text-white
+               {% if message.tags == 'error' %} bg-red-500 {% elif message.tags == 'warning' %} bg-yellow-500 {% else %} bg-green-500 {% endif %}">
+        <span class="mr-2">
+            {% if message.tags == 'error' %}
+            ⚠️
+            {% elif message.tags == 'warning' %}
+            ⚠️
+            {% else %}
+            ✅
+            {% endif %}
+        </span>
+        <span>{{ message }}</span>
+        <button @click="show = false" class="ml-4 text-white hover:text-gray-200">&times;</button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 {% block content %}
 <form method="POST" onsubmit="bookAppointment(event)">
     {% csrf_token %}
-
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div class="{% if message.tags == 'error' %}text-red-500{% else %}text-green-500{% endif %}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
     <!-- Doctor Selection -->
     <label for="doctor" class="block font-semibold mt-2">Select Doctor:</label>
     <select id="doctor" name="doctor" required class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">

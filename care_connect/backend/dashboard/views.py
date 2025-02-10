@@ -103,7 +103,6 @@ def make_appointments(request):
     return render(request, 'make_appointments.html', {'departments': departments})
 
 
-
 def get_doctors(request, department):
     patient_id = request.session.get("user_id")
     print("Selected department:", department)
@@ -122,43 +121,49 @@ def get_doctors(request, department):
         "12:00-13:00", "13:00-14:00", "14:00-15:00", "15:00-16:00"
     ]
     
-    # Use 'selected_date' instead of 'date' to avoid shadowing the datetime.date class
-    if request.GET.get("doctor") and request.GET.get("date"):
-        doctor = request.GET["doctor"]
-        selected_date = request.GET["date"]
+    # Check if a doctor and date are selected (either via GET or POST)
+    selected_doctor = request.GET.get("doctor") or request.POST.get('doctor')
+    selected_date = request.GET.get("date") or request.POST.get('date')
+    
+    if selected_doctor and selected_date:
+        print("doctor and selected date", selected_doctor, selected_date)
 
         cursor.execute(
             "SELECT doctor_id FROM doctor WHERE name = %s AND specialization = %s",
-            [doctor, department]
+            [selected_doctor, department]
         )
         doctor_record = cursor.fetchone()
         if doctor_record:
             doctor_id = doctor_record[0]
+            print("doctor id", doctor_id)
             cursor.execute(
                 "SELECT time FROM appointment WHERE doctor_id = %s AND date = %s",
                 [doctor_id, selected_date]
             )
             booked_times = [row[0] for row in cursor.fetchall()]
+            print("Booked times:", booked_times)
             available_times = [t for t in available_times if t not in booked_times]
+            print("Available times:", available_times)
             
     if request.method == 'POST': 
-        doctor = request.POST.get('doctor')
-        selected_date = request.POST.get('date')  # Renamed variable
         time_val = request.POST.get('time')
         status = request.POST.get('status')
         
         cursor.execute(
-            "SELECT doctor_id FROM doctor WHERE name = %s and specialization = %s", 
-            [doctor, department]
+            "SELECT COUNT(*) FROM appointment WHERE doctor_id = %s AND date = %s AND time = %s",
+            [doctor_id, selected_date, time_val]
         )
-        result = cursor.fetchone()
-        doctor_id = result[0]
-        
-        cursor.execute(
-            "INSERT INTO appointment (date, time, status, patient_id, doctor_id) VALUES (%s, %s, %s, %s, %s)",
-            (selected_date, time_val, status, patient_id, doctor_id)
-        )
-        conn.commit()
+        appointment_exists = cursor.fetchone()[0]
+
+        if appointment_exists > 0:
+            messages.error(request, "The selected time slot is already booked. Please choose another time.")
+            return redirect(request.path)
+        else:
+            cursor.execute(
+                "INSERT INTO appointment (date, time, status, patient_id, doctor_id) VALUES (%s, %s, %s, %s, %s)",
+                (selected_date, time_val, status, patient_id, doctor_id)
+            )
+            conn.commit()
         
         return redirect("total_appointments")
         
@@ -166,7 +171,9 @@ def get_doctors(request, department):
         'department': department, 
         'doctors': doctors, 
         'available_times': available_times,
-        'tomorrow': tomorrow
+        'tomorrow': tomorrow,
+        'selected_doctor': selected_doctor,
+        'selected_date': selected_date
     })
 
 def total_appointments(request):
@@ -177,7 +184,7 @@ def total_appointments(request):
     cursor.execute("SELECT a.*, d.name AS doctor, specialization FROM appointment a JOIN doctor d  ON a.doctor_id = d.doctor_id where a.patient_id = %s;",[patient_id])
     appointments = cursor.fetchall()
     
-    
+    print("yo print vako ho\n")
     print(appointments)
     return render(request, 'total_appointments.html', {'appointments': appointments})
 
@@ -298,7 +305,17 @@ def doctor_list(request):
 def appointment_list(request):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT a.*,p.name as patient_name ,d.name as doctor_name FROM appointment a join patient p on a.patient_id = p.patient_id join doctor d on a.doctor_id = d.doctor_id;")
+    cursor.execute("""
+        SELECT 
+            a.*, 
+            p.name AS patient_name, 
+            d.name AS doctor_name,
+            r.report_id  
+        FROM appointment a
+        JOIN patient p ON a.patient_id = p.patient_id
+        JOIN doctor d ON a.doctor_id = d.doctor_id
+        LEFT JOIN report r ON a.appointment_id = r.appointment_id;
+    """)
     appointments = cursor.fetchall()
     print(appointments)
     return render(request, 'appointment_list.html', {'appointments': appointments})

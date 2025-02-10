@@ -23,17 +23,21 @@
             <tbody>
                 {% for appointment in appointments %}
                 <tr class="border-b">
-                    <td class="py-2 px-4">{{ appointment.0 }}</td>
-                    <td class="py-2 px-4">{{ appointment.7 }}</td>
-                    <td class="py-2 px-4">{{ appointment.8 }}</td>
-                    <td class="py-2 px-4">{{ appointment.1 }}</td>
-                    <td class="py-2 px-4">{{ appointment.2 }}</td>
-                    <td class="py-2 px-4">{{ appointment.3 }}</td>
+                    <td class="py-2 px-4">{{ appointment.0 }}</td> 
+                    <td class="py-2 px-4">{{ appointment.7 }}</td> 
+                    <td class="py-2 px-4">{{ appointment.8 }}</td> 
+                    <td class="py-2 px-4">{{ appointment.1 }}</td> 
+                    <td class="py-2 px-4">{{ appointment.2 }}</td> 
+                    <td class="py-2 px-4">{{ appointment.3 }}</td> 
                     <td class="py-2 px-4">
-                        <form action="{% url 'delete_entity' entity_type='appointment' entity_id=appointment.0 %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700">Cancel</button>
-                        </form>
+                        {% if appointment.9 %}  
+                            <span class="bg-green-500 text-white px-4 py-2 rounded-md">Completed</span>
+                        {% else %}
+                            <form action="{% url 'delete_entity' entity_type='appointment' entity_id=appointment.0 %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700">Cancel</button>
+                            </form>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -41,7 +45,7 @@
         </table>
     </div>
     {% else %}
-    <p class="text-gray-500">You have no upcoming appointments.</p>
+    <p class="text-gray-500">There are no appointments.</p>
     {% endif %}
 </div>
 {% endblock %}

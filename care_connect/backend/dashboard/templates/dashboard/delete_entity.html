@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Records{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-4">Manage Records</h2>
+
+    {% for category, records in data.items %}
+        <h3 class="text-xl font-semibold mt-6 mb-2">{{ category|title }}</h3>
+        {% if records %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg shadow-md">
+                <thead>
+                    <tr>
+                        {% for field in headers[category] %}
+                        <th class="py-2 px-4 bg-blue-500 text-white">{{ field }}</th>
+                        {% endfor %}
+                        <th class="py-2 px-4 bg-blue-500 text-white">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}
+                    <tr class="border-b">
+                        {% for value in record %}
+                        <td class="py-2 px-4">{{ value }}</td>
+                        {% endfor %}
+                        <td class="py-2 px-4">
+                            <form action="{% url 'delete_entity' entity_type='doctor' entity_id=doctor.0 %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-gray-500">No {{ category }} available.</p>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

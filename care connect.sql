@@ -48,8 +48,8 @@ CREATE TABLE appointment (
     doctor_id INT,
     patient_id INT,
     admin_id INT,   
-    FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id) ON DELETE SET NULL,
-    FOREIGN KEY (patient_id) REFERENCES patient(patient_id) ON DELETE SET NULL,
+    FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id) ON DELETE CASCADE,
+    FOREIGN KEY (patient_id) REFERENCES patient(patient_id) ON DELETE CASCADE,
     FOREIGN KEY (admin_id) REFERENCES admin(admin_id) ON DELETE SET NULL
 );
 
@@ -62,10 +62,10 @@ CREATE TABLE report (
     patient_id INT,
     admin_id INT,   
     appointment_id INT,
-    FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id) ON DELETE SET NULL,
-    FOREIGN KEY (patient_id) REFERENCES patient(patient_id) ON DELETE SET NULL,
+    FOREIGN KEY (doctor_id) REFERENCES doctor(doctor_id) ON DELETE CASCADE,
+    FOREIGN KEY (patient_id) REFERENCES patient(patient_id) ON DELETE CASCADE,
     FOREIGN KEY (admin_id) REFERENCES admin(admin_id) ON DELETE SET NULL,
-    FOREIGN KEY (appointment_id) REFERENCES appointment(appointment_id) ON DELETE SET NULL
+    FOREIGN KEY (appointment_id) REFERENCES appointment(appointment_id) ON DELETE CASCADE
 );
 
 INSERT INTO department (name, location, admin_id)

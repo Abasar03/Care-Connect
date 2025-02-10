@@ -30,7 +30,7 @@
                     <td class="py-2 px-4">{{ report.2 }}</td>
                     <td class="py-2 px-4">{{ report.3 }}</td>
                     <td class="py-2 px-4">
-                        <a href="{% url 'logout' %}" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700">Delete</a>
+                        <a href="{% url 'delete_entity' entity_type='report' entity_id=report.0%}" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700">Delete</a>
                     </td>
                 </tr>
                 {% endfor %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Doctors{% endblock %}
+
+{% block content %}
+<form method="POST" onsubmit="bookAppointment(event)">
+    {% csrf_token %}
+
+    <!-- Doctor Selection -->
+    <label for="doctor" class="block font-semibold mt-2">Select Doctor:</label>
+    <select id="doctor" name="doctor" required class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        {% for doctor in doctors %}
+            <option value="{{ doctor }}">{{ doctor }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Date Picker (Restricting to Tomorrow Onwards) -->
+    <label for="date" class="block font-semibold mt-2">Select Date:</label>
+    <input type="date" id="date" name="date" required 
+           class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+           min="{{ tomorrow }}">
+
+    <!-- Time Slots -->
+    <label for="time" class="block font-semibold mt-2">Available Time Slots:</label>
+    <select id="time" name="time" required 
+            class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        {% for time in available_times %}
+            <option value="{{ time }}">{{ time }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Appointment Type -->
+    <label for="status" class="block font-semibold mt-2">Select Appointment Type:</label>
+    <select name="status" id="status" required 
+            class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="online">Online</option>
+        <option value="physical">Physical</option>
+    </select>
+
+    <!-- Submit Button -->
+    <button type="submit"
+            class="mt-4 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">
+        Book Appointment
+    </button>
+</form>
+{% endblock %}
+
+<!-- JavaScript for handling the form and dynamic time slot fetching -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const doctorSelect = document.getElementById("doctor");
+    const dateInput = document.getElementById("date");
+    const timeSelect = document.getElementById("time");
+
+    // Extra precaution: set the minimum date on the client side as well.
+    function setMinDate() {
+        const today = new Date();
+        today.setDate(today.getDate() + 1); // Move to tomorrow
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+        const day = String(today.getDate()).padStart(2, '0');
+        dateInput.setAttribute('min', `${year}-${month}-${day}`);
+    }
+    setMinDate();
+
+    // Function to update available time slots based on selected doctor and date
+    function updateAvailableTimes() {
+        const doctor = doctorSelect.value;
+        const date = dateInput.value;
+        if (doctor && date) {
+            fetch(`/appointment/?doctor=${encodeURIComponent(doctor)}&date=${encodeURIComponent(date)}`, {
+                method: "GET",
+                headers: { "X-Requested-With": "XMLHttpRequest" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                timeSelect.innerHTML = "";
+                if (data.available_times && data.available_times.length > 0) {
+                    data.available_times.forEach(time => {
+                        const option = document.createElement("option");
+                        option.value = time;
+                        option.textContent = time;
+                        timeSelect.appendChild(option);
+                    });
+                } else {
+                    const option = document.createElement("option");
+                    option.textContent = "No available slots";
+                    option.disabled = true;
+                    timeSelect.appendChild(option);
+                }
+            })
+            .catch(error => console.error("Error fetching time slots:", error));
+        } else {
+            timeSelect.innerHTML = "<option value=''>-- Select Time --</option>";
+        }
+    }
+
+    doctorSelect.addEventListener("change", updateAvailableTimes);
+    dateInput.addEventListener("change", updateAvailableTimes);
+
+    // Handle form submission
+    async function bookAppointment(event) {
+        event.preventDefault();
+        const formData = new FormData();
+        formData.append("doctor", doctorSelect.value);
+        formData.append("date", dateInput.value);
+        formData.append("time", timeSelect.value);
+        formData.append("status", document.getElementById("status").value);
+
+        try {
+            const response = await fetch(`/appointment/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                },
+                body: formData
+            });
+            const data = await response.json();
+            alert(data.message || "Appointment booked successfully!");
+        } catch (error) {
+            console.error("Booking failed:", error);
+            alert("Failed to book appointment.");
+        }
+    }
+
+    // Expose the bookAppointment function globally
+    window.bookAppointment = bookAppointment;
+});
+</script>

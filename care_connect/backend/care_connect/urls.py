@@ -36,6 +36,6 @@ urlpatterns = [
     path('doctor_dashboard/<int:doctor_id>/', dashboard_views.doctor_dashboard, name='doctor_dashboard'),
     path('admin_dashboard/', dashboard_views.admin_dashboard, name='admin_dashboard'),
     path('dashboard/', include('dashboard.urls')),
+    path('delete/<str:entity_type>/<int:entity_id>/', dashboard_views.delete_entity, name='delete_entity'),
     path('__reload__/', include("django_browser_reload.urls")),
 ]
-

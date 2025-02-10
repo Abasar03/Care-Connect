@@ -22,6 +22,7 @@ from dashboard import views as dashboard_views
 
 
 urlpatterns = [
+    path('admin',views.admin_login,name='admin_login'),
     path('', views.home, name='home'),
     path('departments/', views.departments, name='departments'),
     path('doctors/', views.doctors, name='doctors'),
@@ -33,6 +34,7 @@ urlpatterns = [
     path('register/patient/', views.patient_register, name='patient_register'),
     path('patient_dashboard/<int:patient_id>/', dashboard_views.patient_dashboard, name='patient_dashboard'),
     path('doctor_dashboard/<int:doctor_id>/', dashboard_views.doctor_dashboard, name='doctor_dashboard'),
+    path('admin_dashboard/', dashboard_views.admin_dashboard, name='admin_dashboard'),
     path('dashboard/', include('dashboard.urls')),
     path('__reload__/', include("django_browser_reload.urls")),
 ]

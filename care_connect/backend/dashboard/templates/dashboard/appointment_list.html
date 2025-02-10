@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}My Appointments{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-4">My Appointments</h2>
+
+    {% if appointments %}
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white rounded-lg shadow-md">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 bg-blue-500 text-white">Appointment ID</th>
+                    <th class="py-2 px-4 bg-blue-500 text-white">Patient</th>
+                    <th class="py-2 px-4 bg-blue-500 text-white">Doctor</th>
+                    <th class="py-2 px-4 bg-blue-500 text-white">Date</th>
+                    <th class="py-2 px-4 bg-blue-500 text-white">Time</th>
+                    <th class="py-2 px-4 bg-blue-500 text-white">Status</th>
+                    <th class="py-2 px-4 bg-blue-500 text-white">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr class="border-b">
+                    <td class="py-2 px-4">{{ appointment.0 }}</td>
+                    <td class="py-2 px-4">{{ appointment.7 }}</td>
+                    <td class="py-2 px-4">{{ appointment.8 }}</td>
+                    <td class="py-2 px-4">{{ appointment.1 }}</td>
+                    <td class="py-2 px-4">{{ appointment.2 }}</td>
+                    <td class="py-2 px-4">{{ appointment.3 }}</td>
+                    <td class="py-2 px-4">
+                        <form action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700">Cancel</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-gray-500">You have no upcoming appointments.</p>
+    {% endif %}
+</div>
+{% endblock %}

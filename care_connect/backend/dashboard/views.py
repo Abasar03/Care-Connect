@@ -41,9 +41,12 @@ def doctor_dashboard(request, doctor_id):
         cursor.close()
         conn.close()
         
-def admin_dashboard(request, username):
-    return render(request, 'admin_dashboard.html', {'username': username})
+def admin_dashboard(request):
+    if not request.session.get('is_admin_logged_in'):
+        messages.error(request, "You must log in first.")
+        return redirect('admin_login')
 
+    return render(request, 'admin_dashboard.html')
 
 def profile(request):
     user_id = request.session.get("user_id")
@@ -259,3 +262,35 @@ def view_reports(request,appointment_id):
     }
     print(appointment_details)
     return render(request, 'view_reports.html',{'appointment':appointment_details}) 
+
+def patient_list(request):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM patient")
+    patients = cursor.fetchall()
+    print(patients)
+    return render(request, 'patient_list.html', {'patients': patients})
+
+def doctor_list(request):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM doctor")
+    doctors = cursor.fetchall()
+    print(doctors)
+    return render(request, 'doctor_list.html', {'doctors': doctors})
+
+def appointment_list(request):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT a.*,p.name as patient_name ,d.name as doctor_name FROM appointment a join patient p on a.patient_id = p.patient_id join doctor d on a.doctor_id = d.doctor_id;")
+    appointments = cursor.fetchall()
+    print(appointments)
+    return render(request, 'appointment_list.html', {'appointments': appointments})
+
+def report_list(request):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT r.*,p.name as patient_name,d.name as doctor_name from report r join patient p on r.patient_id =  p.patient_id join doctor d on r.doctor_id = d.doctor_id;")
+    reports = cursor.fetchall()
+    print(reports)
+    return render(request, 'report_list.html', {'reports': reports})

@@ -169,3 +169,29 @@ def login(request):
             conn.close()
 
     return render(request, 'login.html')
+
+def admin_login(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT password FROM admin WHERE email = %s", [email])
+            admin_data = cursor.fetchone()
+
+        if admin_data:
+            hashed_password = admin_data[0]
+
+            # Create a new cursor for the second query
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT crypt(%s, %s) = %s", [password, hashed_password, hashed_password])
+                is_valid = cursor.fetchone()[0]
+
+            if is_valid:
+                request.session['is_admin_logged_in'] = True
+                messages.success(request, "Login successful!")
+                return redirect('admin_dashboard')
+
+        messages.error(request, "Invalid email or password.")
+    
+    return render(request, 'admin_login.html')

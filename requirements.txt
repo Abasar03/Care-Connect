@@ -1,0 +1,4 @@
+psycopg2
+django_browser_reload
+django-tailwind
+python-dotenv

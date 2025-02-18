@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from care_connect.views import get_db_connection
 from datetime import datetime,timedelta
 
+
 def patient_dashboard(request, patient_id):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -64,6 +65,7 @@ def profile(request):
                     'Specialization': doctor_profile[2],
                     'Contact_Number': doctor_profile[3],
                     'Schedule': doctor_profile[4],
+                    'Email': doctor_profile[5],
                     }
                 return render(request, 'doctor_profile.html', {'profile': profile_data})
 
@@ -154,8 +156,8 @@ def get_doctors(request, department):
             return redirect(request.path)
         else:
             cursor.execute(
-                "INSERT INTO appointment (date, time, status, patient_id, doctor_id) VALUES (%s, %s, %s, %s, %s)",
-                (selected_date, time_val, status, patient_id, doctor_id)
+                "INSERT INTO appointment (date, time, status, patient_id, doctor_id,admin_id) VALUES (%s, %s, %s, %s, %s,%s)",
+                (selected_date, time_val, status, patient_id, doctor_id,1)
             )
             conn.commit()
         
@@ -244,8 +246,8 @@ def make_reports(request,appointment_id):
             print(f"Error: The date format '{date}' is invalid.")
         
         cursor.execute(
-            "INSERT INTO report (doctor_id,patient_id,diagnosis,treatment,date,appointment_id) VALUES (%s, %s, %s, %s, %s, %s)",
-            (doctor_id,patient_id,diagnosis,treatment,date,appointment_id),
+            "INSERT INTO report (doctor_id,patient_id,diagnosis,treatment,date,appointment_id,admin_id) VALUES (%s, %s, %s, %s, %s, %s,%s)",
+            (doctor_id,patient_id,diagnosis,treatment,date,appointment_id,1),
         )
         conn.commit()
         

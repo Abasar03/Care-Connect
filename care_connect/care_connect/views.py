@@ -56,8 +56,8 @@ def doctor_register(request):
         dep_id = result[0]
         
         cursor.execute(
-            "INSERT INTO doctor (name, email, password, specialization, contact_num, schedule,dep_id) VALUES (%s, %s, %s, %s, %s, %s,%s)",
-            (name, email, password, specialization, contact_num, schedule,dep_id),
+            "INSERT INTO doctor (name, email, password, specialization, contact_num, schedule,dep_id,admin_id) VALUES (%s, %s, %s, %s, %s, %s,%s,%s)",
+            (name, email, password, specialization, contact_num, schedule,dep_id,1),
         )
         conn.commit()
         cursor.close()
@@ -89,8 +89,8 @@ def patient_register(request):
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO patient (name, age, gender, contact_num, address, email, password) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-            (name, age, gender, contact_num, address, email, password),
+            "INSERT INTO patient (name, age, gender, contact_num, address, email, password,admin_id) VALUES (%s, %s, %s, %s, %s, %s, %s,%s)",
+            (name, age, gender, contact_num, address, email, password,1),
         )
         conn.commit()
         cursor.close()

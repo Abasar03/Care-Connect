@@ -1,6 +1,5 @@
 CREATE TABLE admin (
     admin_id SERIAL PRIMARY KEY,
-    name VARCHAR(150) NOT NULL,     
     email VARCHAR(150) NOT NULL UNIQUE,        
     password VARCHAR(255) NOT NULL
 );
@@ -70,10 +69,10 @@ CREATE TABLE report (
 
 INSERT INTO department (name, location, admin_id)
 VALUES 
-    ('Cardiology', 'Building A'),
-    ('Neurology', 'Building B'),
-    ('Orthopedics', 'Building C'),
-    ('Pediatrics', 'Building A'),
-    ('Medicine', 'Building B'),
-    ('Dermatology', 'Building C');
+    ('Cardiology', 'Building A',1),
+    ('Neurology', 'Building B',1),
+    ('Orthopedics', 'Building C',1),
+    ('Pediatrics', 'Building A',1),
+    ('Medicine', 'Building B',1),
+    ('Dermatology', 'Building C',1);
 

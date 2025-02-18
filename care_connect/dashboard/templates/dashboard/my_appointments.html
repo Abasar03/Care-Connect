@@ -1,46 +1,51 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Appointments</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
 
-{% block title %}My Appointments{% endblock %}
+    <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold mb-4">My Appointments</h2>
 
-{% block content %}
-<div class="container mx-auto p-6">
-    <h2 class="text-2xl font-bold mb-4">My Appointments</h2>
-
-    {% if appointments %}
-    <div class="overflow-x-auto">
-        <table class="min-w-full bg-white rounded-lg shadow-md">
-            <thead>
-                <tr>
-                    <th class="py-2 px-4 bg-blue-500 text-white">Date</th>
-                    <th class="py-2 px-4 bg-blue-500 text-white">Time</th>
-                    <th class="py-2 px-4 bg-blue-500 text-white">Status</th>
-                    <th class="py-2 px-4 bg-blue-500 text-white">Patient</th>
-                    <th class="py-2 px-4 bg-blue-500 text-white">Report</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for appointment in appointments %}
-                <tr class="border-b">
-                    <td class="py-2 px-4">{{ appointment.1 }}</td>
-                    <td class="py-2 px-4">{{ appointment.2 }}</td>
-                    <td class="py-2 px-4">{{ appointment.3 }}</td>
-                    <td class="py-2 px-4">{{ appointment.7 }}</td>
-                    <td class="py-2 px-4">
-                        {% if appointment.8 %}  
-                            <!-- If report_id exists, show "View Report" -->
-                            <a href="{% url 'view_reports' appointment_id=appointment.0 %}" class="text-blue-500 underline">View Report</a>
-                        {% else %}
-                            <!-- If no report_id, show "Generate Report" -->
-                            <a href="{% url 'make_reports' appointment_id=appointment.0 %}" class="text-blue-500 underline">Generate Report</a>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% if appointments %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg shadow-md">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4 bg-blue-500 text-white">Date</th>
+                        <th class="py-2 px-4 bg-blue-500 text-white">Time</th>
+                        <th class="py-2 px-4 bg-blue-500 text-white">Status</th>
+                        <th class="py-2 px-4 bg-blue-500 text-white">Patient</th>
+                        <th class="py-2 px-4 bg-blue-500 text-white">Report</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                    <tr class="border-b">
+                        <td class="py-2 px-4">{{ appointment.1 }}</td>
+                        <td class="py-2 px-4">{{ appointment.2 }}</td>
+                        <td class="py-2 px-4">{{ appointment.3 }}</td>
+                        <td class="py-2 px-4">{{ appointment.7 }}</td>
+                        <td class="py-2 px-4">
+                            {% if appointment.8 %}  
+                                <a href="{% url 'view_reports' appointment_id=appointment.0 %}" class="text-blue-500 underline">View Report</a>
+                            {% else %}
+                                <a href="{% url 'make_reports' appointment_id=appointment.0 %}" class="text-blue-500 underline">Generate Report</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-gray-500">You have no appointments scheduled.</p>
+        {% endif %}
     </div>
-    {% else %}
-    <p class="text-gray-500">You have no appointments scheduled.</p>
-    {% endif %}
-</div>
-{% endblock %}
+
+</body>
+</html>

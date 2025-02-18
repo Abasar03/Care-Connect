@@ -64,6 +64,7 @@ def profile(request):
                     'Specialization': doctor_profile[2],
                     'Contact_Number': doctor_profile[3],
                     'Schedule': doctor_profile[4],
+                    'Email': doctor_profile[5],
                     }
                 return render(request, 'doctor_profile.html', {'profile': profile_data})
 

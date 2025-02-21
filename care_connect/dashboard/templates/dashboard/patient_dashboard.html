@@ -1,8 +1,4 @@
-{% extends 'base.html' %}  <!-- Extend base.html -->
 
-{% block title %}Patient Dashboard - Care Connect{% endblock %}  <!-- Override the title block -->
-
-{% block content %}  <!-- Override the content block -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -103,16 +99,16 @@
     <header class="header bg-blue-600 text-white flex justify-between items-center">
       <div class="container mx-auto">
           <h1 class="text-3xl font-semibold">
-              <i class="fas fa-user-md mr-2 text-4xl"></i>
+              <i class="fas fa-user-injured mr-2 text-4xl"></i>
               Patient Dashboard
           </h1>
       </div>
       <button
-          class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline-red active:bg-red-800 transform hover:scale-105 transition-transform duration-300 ease-in-out"
-          onclick="window.location.href='/'">
-          <i class="fas fa-sign-out-alt mr-2"></i>
-          Logout
-      </button>
+            class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition-colors duration-200"
+            onclick="window.location.href='/'">
+            <i class="fas fa-sign-out-alt mr-2"></i>
+            Logout
+        </button>
     </header>
 
     <!-- Sidebar (Non-scrollable) -->
@@ -175,7 +171,7 @@
           <!-- Left Section -->
           <div class="mb-4 md:mb-0">
             <h2 class="text-xl font-bold">Care Connect</h2>
-            <p class="text-sm">© 2023 All rights reserved.</p>
+            <p class="text-sm">&copy; 2025 All rights reserved.</p>
           </div>
           <!-- Middle Section -->
           <ul class="flex space-x-6 text-sm">
@@ -275,4 +271,3 @@
     </script>
   </body>
 </html>
-{% endblock %}

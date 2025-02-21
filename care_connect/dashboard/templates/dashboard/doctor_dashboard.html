@@ -109,7 +109,7 @@
         <nav aria-label="Sidebar">
             <ul class="p-6 space-y-6">
                 <li>
-                    <a href="{% url 'my_appointments' %}" class="flex items-center gap-3 py-2 px-4 rounded-md text-gray-800 hover:bg-green-50">
+                    <a href="{% url 'my_appointments' %}" class="ajax-link flex items-center gap-3 py-2 px-4 rounded-md text-gray-800 hover:bg-green-50">
                         <i class="fas fa-calendar-check text-green-600"></i>
                         <span>My Appointments</span>
                     </a>
@@ -129,7 +129,6 @@
 
     <!-- Main Content -->
     <main id="main-content" class="main-content bg-gray-50">
-        <!-- Dashboard Content -->
         <div id="dashboard-content">
             {% block dashboard_content %}
             <div class="p-6 bg-white rounded-lg shadow-md">
@@ -140,16 +139,17 @@
             </div>
             {% endblock %}
         </div>
-
+        
+        <div id="profile-content" class="hidden"></div>
     </main>
-
+    
     <!-- Footer -->
     <footer class="footer bg-gray-800 text-white flex items-center justify-center">
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0">
                     <h2 class="text-xl font-bold">Care Connect</h2>
-                    <p class="text-sm">© 2023 All rights reserved.</p>
+                    <p class="text-sm">&copy; 2025 All rights reserved.</p>
                 </div>
                 <ul class="flex space-x-6 text-sm">
                     <li><a href="/about" class="hover:text-green-400 transition-colors">About</a></li>

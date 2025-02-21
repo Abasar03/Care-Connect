@@ -44,9 +44,8 @@ python manage.py migrate
 ```
 Start the development server:
 ```
-
 ## Usage
-1. Open your web browser and go to http://localhost:8000(or the port set in .env).
+1. Open your web browser and go to http://localhost:8000 (or the port set in .env).
 2. Register a new account or log in with an existing one.
 3. Book an appointment with the appropriate doctor and department.
 

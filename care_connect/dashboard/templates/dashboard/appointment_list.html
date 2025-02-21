@@ -1,23 +1,23 @@
-{% extends "base.html" %}
 
-{% block title %}My Appointments{% endblock %}
+{% block title %}
+{% endblock %}
 
 {% block content %}
 <div class="container mx-auto p-6">
-    <h2 class="text-2xl font-bold mb-4">My Appointments</h2>
+    <h2 class="text-2xl font-bold mb-4">Total Appointments</h2>
 
     {% if appointments %}
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white rounded-lg shadow-md">
             <thead>
                 <tr>
-                    <th class="py-2 px-4 bg-blue-500 text-white">Appointment ID</th>
-                    <th class="py-2 px-4 bg-blue-500 text-white">Patient</th>
-                    <th class="py-2 px-4 bg-blue-500 text-white">Doctor</th>
-                    <th class="py-2 px-4 bg-blue-500 text-white">Date</th>
-                    <th class="py-2 px-4 bg-blue-500 text-white">Time</th>
-                    <th class="py-2 px-4 bg-blue-500 text-white">Status</th>
-                    <th class="py-2 px-4 bg-blue-500 text-white">Action</th>
+                    <th class="py-2 px-4 bg-gray-800 text-white">Appointment ID</th>
+                    <th class="py-2 px-4 bg-gray-800 text-white">Patient</th>
+                    <th class="py-2 px-4 bg-gray-800 text-white">Doctor</th>
+                    <th class="py-2 px-4 bg-gray-800 text-white">Date</th>
+                    <th class="py-2 px-4 bg-gray-800 text-white">Time</th>
+                    <th class="py-2 px-4 bg-gray-800 text-white">Status</th>
+                    <th class="py-2 px-4 bg-gray-800 text-white">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,7 +45,7 @@
         </table>
     </div>
     {% else %}
-    <p class="text-gray-500">There are no appointments.</p>
+    <p class="text-gray-800">There are no appointments.</p>
     {% endif %}
 </div>
 {% endblock %}

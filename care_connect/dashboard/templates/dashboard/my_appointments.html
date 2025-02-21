@@ -16,11 +16,11 @@
             <table class="min-w-full bg-white rounded-lg shadow-md">
                 <thead>
                     <tr>
-                        <th class="py-2 px-4 bg-blue-500 text-white">Date</th>
-                        <th class="py-2 px-4 bg-blue-500 text-white">Time</th>
-                        <th class="py-2 px-4 bg-blue-500 text-white">Status</th>
-                        <th class="py-2 px-4 bg-blue-500 text-white">Patient</th>
-                        <th class="py-2 px-4 bg-blue-500 text-white">Report</th>
+                        <th class="py-2 px-4 bg-green-500 text-white">Date</th>
+                        <th class="py-2 px-4 bg-green-500 text-white">Time</th>
+                        <th class="py-2 px-4 bg-green-500 text-white">Status</th>
+                        <th class="py-2 px-4 bg-green-500 text-white">Patient</th>
+                        <th class="py-2 px-4 bg-green-500 text-white">Report</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,9 +32,9 @@
                         <td class="py-2 px-4">{{ appointment.7 }}</td>
                         <td class="py-2 px-4">
                             {% if appointment.8 %}  
-                                <a href="{% url 'view_reports' appointment_id=appointment.0 %}" class="text-blue-500 underline">View Report</a>
+                                <a href="{% url 'view_reports' appointment_id=appointment.0 %}" class="text-green-500 underline">View Report</a>
                             {% else %}
-                                <a href="{% url 'make_reports' appointment_id=appointment.0 %}" class="text-blue-500 underline">Generate Report</a>
+                                <a href="{% url 'make_reports' appointment_id=appointment.0 %}" class="text-green-500 underline">Generate Report</a>
                             {% endif %}
                         </td>
                     </tr>

@@ -15,9 +15,6 @@ def departments(request):
 def doctors(request):
     return render(request,'doctors.html')
 
-def contact_us(request):
-    return render(request,'contact_us.html')
-
 def index(request):
     return render(request, 'index.html')
 

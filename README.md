@@ -29,23 +29,25 @@ Follow these steps to set up TrackFolio on your local machine:
 ```
 [git clone https://github.com/yourusername/TrackFolio.git](https://github.com/Abasar03/Care_Connect.git)
 ```
-
-2. Create a PostgreSQL database and run the SQL scripts provided in 'care connect.sql' to set up tables.
+<br>
+2. Create a PostgreSQL database and run the SQL scripts provided in 'care connect.sql' to set up tables.<br>
+**Note**: Replace the values with your actual values.<br>
 
 3. Create an environment file:
     - In the care_connect directory, create a .env file.
     - Add the required environment variables as listed in .env.example.  
 
+<br>
 4. Install dependencies:
 ```
 pip install -r requirements.txt
 ```
-
+<br>
 5. Run database migrations:
 ```
 python manage.py migrate
 ```
-
+<br>
 6. Start the development server:
 ```
 Start the development server:
@@ -74,8 +76,8 @@ We plan to enhance Care Connect with the following features:
 - **Mobile App:** Build a mobile version for better accessibility.
 - **Dark Mode:** User-customizable themes for better UI/UX.
 
-For more details, visit the project repositories:
-**[Care Connect]**(https://github.com/Abasar03/Care-Connect/tree/main/care_connect)
+For more details, visit the project repositories:<br>
+[Care Connect](https://github.com/Abasar03/Care-Connect/tree/main/care_connect)
 
 By continuously improving Care Connect, we aim to provide an efficient and user-friendly hospital appointment system.
 ## Directory Structure

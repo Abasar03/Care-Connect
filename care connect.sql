@@ -76,3 +76,7 @@ VALUES
     ('Medicine', 'Building B',1),
     ('Dermatology', 'Building C',1);
 
+Insert INTO admin (email, password)
+VALUES ('your_email', crypt('your_password', gen_salt('bf')));;
+    -- Replace your_email and your_password with your actual email and password.
+

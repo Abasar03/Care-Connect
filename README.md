@@ -29,25 +29,23 @@ Follow these steps to set up TrackFolio on your local machine:
 ```
 [git clone https://github.com/yourusername/TrackFolio.git](https://github.com/Abasar03/Care_Connect.git)
 ```
-<br>
 2. Create a PostgreSQL database and run the SQL scripts provided in 'care connect.sql' to set up tables.<br>
-**Note**: Replace the values with your actual values.<br>
+**Note**: Replace the values with your actual values.<
 
 3. Create an environment file:
     - In the care_connect directory, create a .env file.
     - Add the required environment variables as listed in .env.example.  
 
-<br>
 4. Install dependencies:
 ```
 pip install -r requirements.txt
 ```
-<br>
+
 5. Run database migrations:
 ```
 python manage.py migrate
 ```
-<br>
+
 6. Start the development server:
 ```
 Start the development server:

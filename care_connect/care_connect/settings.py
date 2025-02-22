@@ -52,6 +52,11 @@ MIDDLEWARE = [
 
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://dbms-project-z3gq.onrender.com',
+]
+
+
 ROOT_URLCONF = 'care_connect.urls'
 
 TEMPLATES = [

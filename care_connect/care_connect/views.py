@@ -27,7 +27,8 @@ def get_db_connection():
         user=settings.DATABASES['default']['USER'],
         password=settings.DATABASES['default']['PASSWORD'],
         host=settings.DATABASES['default']['HOST'],
-        port=settings.DATABASES['default']['PORT']
+        port=settings.DATABASES['default']['PORT'],
+        sslmode="require"
     )
 
 
